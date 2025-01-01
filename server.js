@@ -23,9 +23,7 @@ app.listen(port, () => {
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-    origin: client || "*",
-    methods: ["POST", "GET", "PUT", "DELETE"],
-    credentials: false
+    origin: client,
 }));
 
 
