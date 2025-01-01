@@ -3,7 +3,8 @@ import expressAsyncHandler from "express-async-handler";
 
 const createTodo = expressAsyncHandler(async (req, res) => {
     try {
-        const {projectId, name, date, time, completed} = req.body;
+        const projectId = req.body.projectId._id;
+        const {name, date, time, completed} = req.body;
         if(!name || !projectId || !date || !time){
             return res.status(400).json({message: "Name, projectId, Time and Date is required"});
         }
@@ -39,15 +40,19 @@ const getAllTodos = expressAsyncHandler(async (req, res) => {
 const updateTodo = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
-        const {name} = req.body;
+        const {name, date, time} = req.body;
+        const projectId = req.body.projectId._id;
 
-        if (!id || !name) {
-            return res.status(400).json({ message: "Id and Name is required" });
+        if (!id || !name || !projectId) {
+            return res.status(400).json({ message: "Id, Name, ProjectId, Date and Time is required" });
         }
 
         const updatedTodo = await Todo.findByIdAndUpdate(id, {
             $set: {
-                name
+                name,
+                projectId,
+                time,
+                date
             },
         },{ new: true}).populate('projectId', 'name color');
 

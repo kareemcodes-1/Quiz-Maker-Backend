@@ -14,6 +14,7 @@ configDotenv();
 const app = express();
 
 const port = process.env.PORT || 8000;
+const client = process.env.VITE_CLIENT;
 
 app.listen(port, () => {
     console.log(`Server started running on ${port}`);
@@ -22,7 +23,7 @@ app.listen(port, () => {
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-    origin: ['*'],
+    origin: [client],
     methods: ["POST", "GET", "PUT", "DELETE"],
 }));
 
