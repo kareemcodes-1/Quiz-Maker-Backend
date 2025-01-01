@@ -23,9 +23,9 @@ app.listen(port, () => {
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-    origin: client,
+    origin: [client],
+    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
 }));
-
 
 connectDB();
 
