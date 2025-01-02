@@ -15,9 +15,10 @@ const createMemory = expressAsyncHandler(async (req, res) => {
         });
 
         const newMemory = await memory.save();
+        await newMemory.populate('projectId', 'name color');
         res.status(201).json(newMemory);
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 

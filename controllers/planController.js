@@ -38,7 +38,6 @@ const updatePlan = expressAsyncHandler(async (req, res) => {
         const {id} = req.params;
         const projectId = req.body.projectId._id;
         const {content} = req.body;
-        console.log(id, projectId, content);
         if (!id || !content || !projectId) {
             return res.status(400).json({ message: "Id, Content and ProjectId is required" });
         }

@@ -15,11 +15,13 @@ const createTodo = expressAsyncHandler(async (req, res) => {
             date, 
             time,
             completed
-        }).populate('projectId', 'name color');
+        })
 
         const newTodo = await todo.save();
+        await newTodo.populate('projectId', 'name color');
         res.status(201).json(newTodo);
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Server Error"});
     }
 });
