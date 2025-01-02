@@ -16,6 +16,7 @@ const createGoal = expressAsyncHandler(async (req, res) => {
         });
 
         const newGoal = await goal.save();
+        await newGoal.populate('projectId', 'name color');
         res.status(201).json(newGoal);
     } catch (error) {
         res.status(500).json({message: "Server Error"});
@@ -50,7 +51,7 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
                 projectId,
                 time
             },
-        },{ new: true, runValidators: true });
+        },{ new: true, runValidators: true }).populate('projectId', 'name color');
 
         if (!updatedGoal) {
             return res.status(404).json({ message: "Goal not found" });
@@ -86,7 +87,7 @@ const completeGoal = expressAsyncHandler(async (req, res) => {
             $set: {
                 completed
             },
-        },{ new: true, runValidators: true });
+        },{ new: true, runValidators: true }).populate('projectId', 'name color');
 
         if (!updatedGoal) {
             return res.status(404).json({ message: "Goal not found" });
