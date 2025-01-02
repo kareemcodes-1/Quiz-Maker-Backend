@@ -5,7 +5,7 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true
     },
-    color: {
+    emoji: {
         type: mongoose.Schema.Types.String,
         required: true
     }

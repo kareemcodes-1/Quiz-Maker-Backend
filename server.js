@@ -7,6 +7,8 @@ import focusRoutes from "./routes/focusRoutes.js";
 import planRoutes from "./routes/planRoutes.js";
 import memoryRoutes from "./routes/memoryRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
+import learningRoutes from "./routes/learningRoutes.js";
+import gratitudeRoutes from "./routes/gratitudeRoutes.js";
 import { connectDB } from "./config/connectDB.js";
 
 configDotenv();
@@ -34,3 +36,5 @@ app.use('/api/focus', focusRoutes);
 app.use('/api/memories', memoryRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/plans', planRoutes);
+app.use('/api/gratitudes', gratitudeRoutes);
+app.use('/api/learnings', learningRoutes);

@@ -18,7 +18,7 @@ const createTodo = expressAsyncHandler(async (req, res) => {
         })
 
         const newTodo = await todo.save();
-        await newTodo.populate('projectId', 'name color');
+        await newTodo.populate('projectId', 'name emoji');
         res.status(201).json(newTodo);
     } catch (error) {
         console.log(error);
@@ -28,7 +28,7 @@ const createTodo = expressAsyncHandler(async (req, res) => {
 
 const getAllTodos = expressAsyncHandler(async (req, res) => {
     try {
-        const todos = await Todo.find().populate('projectId', 'name color');
+        const todos = await Todo.find().populate('projectId', 'name emoji');
         if(todos.length > 0){
             res.status(200).json(todos);
         }else{
@@ -56,7 +56,7 @@ const updateTodo = expressAsyncHandler(async (req, res) => {
                 time,
                 date
             },
-        },{ new: true}).populate('projectId', 'name color');
+        },{ new: true}).populate('projectId', 'name emoji');
 
         if (!updatedTodo) {
             return res.status(404).json({ message: "Todo not found" });
@@ -77,7 +77,7 @@ const completeTodo = expressAsyncHandler(async (req, res) => {
             $set: {
                 completed
             },
-        },{ new: true}).populate('projectId', 'name color');
+        },{ new: true}).populate('projectId', 'name emoji');
 
         if (!updatedTodo) {
             return res.status(404).json({ message: "Todo not found" });

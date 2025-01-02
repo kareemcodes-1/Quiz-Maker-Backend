@@ -3,14 +3,14 @@ import expressAsyncHandler from "express-async-handler";
 
 const createProject = expressAsyncHandler(async (req, res) => {
     try {
-        const {name, color} = req.body;
-        if(!name || !color){
-            return res.status(400).json({message: "Name and Color is required"});
+        const {name, emoji} = req.body;
+        if(!name || !emoji){
+            return res.status(400).json({message: "Name and emoji is required"});
         }
 
         const project = await Project.create({
             name,
-            color
+            emoji
         });
 
         const newProject = await project.save();

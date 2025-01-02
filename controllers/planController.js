@@ -22,7 +22,7 @@ const createPlan = expressAsyncHandler(async (req, res) => {
 
 const getAllPlans = expressAsyncHandler(async (req, res) => {
     try {
-        const plans = await Plan.find().populate('projectId', 'name color');
+        const plans = await Plan.find().populate('projectId', 'name emoji');
         if(plans.length > 0){
             res.status(200).json(plans);
         }else{
