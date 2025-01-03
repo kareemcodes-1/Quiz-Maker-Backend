@@ -15,7 +15,7 @@ const createPhilosophy = expressAsyncHandler(async (req, res) => {
         const newPhilosophy = await philosophy.save();
         res.status(201).json(newPhilosophy);
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 
@@ -28,7 +28,7 @@ const getAllPhilosophy = expressAsyncHandler(async (req, res) => {
             return res.status(400).json({message: "Philosophies are empty"}); 
         }
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 
@@ -47,12 +47,12 @@ const updatePhilosophy = expressAsyncHandler(async (req, res) => {
         },{ new: true, runValidators: true });
 
         if (!updatedPhilosophy) {
-            return res.status(404).json({ message: "Philosophy not found" });
+            return res.status(404).json({ message: error.message });
         }
 
         res.status(200).json(updatedPhilosophy);
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 
@@ -68,7 +68,7 @@ const deletePhilosophy = expressAsyncHandler(async (req, res) => {
 
         res.status(200).json(deletedPhilosophy);
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 
