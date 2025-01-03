@@ -1,5 +1,5 @@
 import express from "express";
-import { createPhilosophy, getAllPhilosophy, updatePhilosophy, deletePhilosophy } from "../controllers/PhilosophyController.js";
+import { createPhilosophy, getAllPhilosophy, updatePhilosophy, deletePhilosophy } from "../controllers/philosophyController.js";
 
 const router = express.Router();
 
