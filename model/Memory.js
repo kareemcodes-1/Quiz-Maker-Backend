@@ -10,6 +10,22 @@ const memorySchema = new mongoose.Schema({
             ref: 'Project',
             required: true
         },
+    steps: {
+        type: String,
+        required: false,
+    },
+    kilometers: {
+        type: String,
+        required: false,
+    },
+    calories: {
+        type: String,
+        required: false,
+    },
+    mins: {
+        type: String,
+        required: false,
+    },
     image: {
         type: mongoose.Schema.Types.String,
         required: true

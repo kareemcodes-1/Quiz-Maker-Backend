@@ -1,33 +1,48 @@
 import { Memory } from "../model/Memory.js";
+import {Project} from "../model/Project.js";
 import expressAsyncHandler from "express-async-handler";
 
 const createMemory = expressAsyncHandler(async (req, res) => {
     try {
-      const { name, image, projectId } = req.body;
+      const { name, image, projectId, kilometers, steps, mins, calories } = req.body;
   
       if (!name || !image || !projectId) {
         return res.status(400).json({ message: "Name, Image, and ProjectId are required." });
       }
   
+      // Validate Cloudinary image URL
       const cloudinaryRegex = /^https?:\/\/res\.cloudinary\.com\/[a-z0-9]+\/image\/upload\/.+$/;
       if (!cloudinaryRegex.test(image)) {
         return res.status(400).json({ message: "Invalid image URL. Please provide a valid Cloudinary URL." });
       }
-
-      const memory = await Memory.create({
-        name,
-        projectId,
-        image,
-      });
   
-      const newMemory = await memory.save();
-      await newMemory.populate("projectId", "name emoji");
+      const project = await Project.findById(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found." });
+      }
   
-      res.status(201).json(newMemory);
+      let memoryData = { name, projectId: project._id, image };
+  
+      if (project.name === "Fitness") {
+        memoryData = {
+          ...memoryData,
+          kilometers: kilometers || 0,
+          mins: mins || 0,
+          steps: steps || 0,
+          calories: calories || 0,
+        };
+      }
+  
+      const memory = await Memory.create(memoryData);
+  
+      await memory.populate("projectId", "name emoji");
+  
+      res.status(201).json(memory);
     } catch (error) {
       res.status(500).json({ message: error.message || "Server Error" });
     }
   });
+  
 
 const getAllMemories = expressAsyncHandler(async (req, res) => {
     try {
@@ -47,16 +62,31 @@ const updateMemory = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id
-        const {name, image} = req.body;
+        const {name, image, kilometers, steps, mins, calories} = req.body;
         if (!id || !name || !projectId || !image) {
             return res.status(400).json({ message: "Id, Name, ProjectId and Image is required" });
         }
 
+        const project = await Project.findById(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found." });
+      }
+
+      let memoryData = { name, projectId: project._id, image };
+
+      if (project.name === "Fitness") {
+        memoryData = {
+          ...memoryData,
+          kilometers: kilometers || 0,
+          mins: mins || 0,
+          steps: steps || 0,
+          calories: calories || 0,
+        };
+      }
+
         const updatedMemory = await Memory.findByIdAndUpdate(id, {
             $set: {
-                name,
-                projectId,
-                image
+                ...memoryData
             },
         },{ new: true, runValidators: true }).populate('projectId', 'name emoji');
 

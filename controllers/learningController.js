@@ -3,25 +3,28 @@ import expressAsyncHandler from "express-async-handler";
 
 const createLearning = expressAsyncHandler(async (req, res) => {
     try {
+        const projectId = req.body.projectId._id;
         const {content} = req.body;
-        if(!content){
-            return res.status(400).json({message: "Content is required"});
+        if(!content || !projectId){
+            return res.status(400).json({message: "Content and projectId is required"});
         }
 
         const learning = await Learning.create({
             content,
-        });
+            projectId
+        })
 
         const newLearning = await learning.save();
+        await newLearning.populate('projectId', 'name emoji');
         res.status(201).json(newLearning);
     } catch (error) {
-        res.status(500).json({message: "Server Error"});
+        res.status(500).json({message: error.message});
     }
 });
 
 const getAllLearning = expressAsyncHandler(async (req, res) => {
     try {
-        const learnings = await Learning.find();
+        const learnings = await Learning.find().populate('projectId', 'name emoji');
         if(learnings.length > 0){
             res.status(200).json(learnings);
         }else{
@@ -35,16 +38,18 @@ const getAllLearning = expressAsyncHandler(async (req, res) => {
 const updateLearning = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
+        const projectId = req.body.projectId._id;
         const {content} = req.body;
-        if (!id || !content) {
-            return res.status(400).json({ message: "Id and Content is required" });
+        if (!id || !content || !projectId) {
+            return res.status(400).json({ message: "Id and Content and ProjectId is required" });
         }
 
         const updatedLearning = await Learning.findByIdAndUpdate(id, {
             $set: {
                 content,
+                projectId
             },
-        },{ new: true, runValidators: true });
+        },{ new: true, runValidators: true }).populate('projectId', 'name emoji');
 
         if (!updatedLearning) {
             return res.status(404).json({ message: "Learning not found" });

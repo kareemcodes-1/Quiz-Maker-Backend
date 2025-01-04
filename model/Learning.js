@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const learningSchema = new mongoose.Schema({
+    projectId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Project",
+          required: true,
+        },
     content: {
         type: mongoose.Schema.Types.String,
         required: true
