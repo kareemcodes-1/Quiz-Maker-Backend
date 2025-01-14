@@ -3,15 +3,17 @@ import expressAsyncHandler from "express-async-handler";
 
 const createGoal = expressAsyncHandler(async (req, res) => {
     try {
-        const {name, projectId, time, completed} = req.body;
-        if(!name || !projectId || !time){
-            return res.status(400).json({message: "Name, ProjectId and Time is required"});
+        const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate} = req.body;
+        if(!name || !projectId || !time || !startDeadlineDate || !endDeadlineDate){
+            return res.status(400).json({message: "Name, ProjectId Time startDeadline and endDeadline is required"});
         }
 
         const goal = await Goal.create({
             name,
             projectId,
             time,
+            startDeadlineDate,
+            endDeadlineDate,
             completed
         });
 
@@ -40,16 +42,18 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id
-        const {name, time} = req.body;
-        if (!id || !name || !projectId || !time) {
-            return res.status(400).json({ message: "Id, Name, ProjectId and Time is required" });
+        const {name, time, startDeadlineDate, endDeadlineDate} = req.body;
+        if (!id || !name || !projectId || !time || !startDeadlineDate  || !endDeadlineDate) {
+            return res.status(400).json({ message: "Id, Name, ProjectId Time startDeadline and endDeadline is required" });
         }
 
         const updatedGoal = await Goal.findByIdAndUpdate(id, {
             $set: {
                 name,
                 projectId,
-                time
+                time,
+                startDeadlineDate,
+                endDeadlineDate,
             },
         },{ new: true, runValidators: true }).populate('projectId', 'name emoji');
 
