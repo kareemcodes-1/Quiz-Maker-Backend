@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 
 const createGoal = expressAsyncHandler(async (req, res) => {
     try {
-        const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate} = req.body;
+        const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate, image} = req.body;
         if(!name || !projectId || !time || !startDeadlineDate || !endDeadlineDate){
             return res.status(400).json({message: "Name, ProjectId Time startDeadline and endDeadline is required"});
         }
@@ -12,6 +12,7 @@ const createGoal = expressAsyncHandler(async (req, res) => {
             name,
             projectId,
             time,
+            image,
             startDeadlineDate,
             endDeadlineDate,
             completed
@@ -42,7 +43,7 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id
-        const {name, time, startDeadlineDate, endDeadlineDate} = req.body;
+        const {name, time, startDeadlineDate, endDeadlineDate, image} = req.body;
         if (!id || !name || !projectId || !time || !startDeadlineDate  || !endDeadlineDate) {
             return res.status(400).json({ message: "Id, Name, ProjectId Time startDeadline and endDeadline is required" });
         }
@@ -51,6 +52,7 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
             $set: {
                 name,
                 projectId,
+                image,
                 time,
                 startDeadlineDate,
                 endDeadlineDate,

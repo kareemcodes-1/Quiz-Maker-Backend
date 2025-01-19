@@ -10,6 +10,10 @@ const goalSchema = new mongoose.Schema({
                 ref: 'Project',
                 required: true
     },
+    image: {
+        type: mongoose.Schema.Types.String,
+        required: false
+    },
     time: {
         type: mongoose.Schema.Types.String,
         required: true

@@ -10,6 +10,7 @@ import goalRoutes from "./routes/goalRoutes.js";
 import learningRoutes from "./routes/learningRoutes.js";
 import gratitudeRoutes from "./routes/gratitudeRoutes.js";
 import philosophyRoutes from "./routes/philosophyRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { connectDB } from "./config/connectDB.js";
 
 configDotenv();
@@ -31,6 +32,7 @@ app.use(cors({
 
 connectDB();
 
+app.use('/api/users', userRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/focus', focusRoutes);
