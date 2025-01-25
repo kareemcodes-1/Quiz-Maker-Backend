@@ -6,8 +6,9 @@ export const generateToken = (res, userId) => {
     });
 
     res.cookie('jwt', token, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: false
+        httpOnly: true, // Prevent access via JavaScript
+        secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
+        sameSite: 'none', // Required for cross-site cookies
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 }
