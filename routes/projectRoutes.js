@@ -4,6 +4,6 @@ import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.route('/').get(getAllProjects).post(protectRoute, createProject);
+router.route('/').get(protectRoute, getAllProjects).post(protectRoute, createProject);
 
 export default router;
