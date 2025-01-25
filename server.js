@@ -27,11 +27,10 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(
     cors({
-      origin: [client, "https://productivity-app-client-ebon.vercel.app"], // Add client URL explicitly
+      origin: "*", // Add client URL explicitly
       credentials: true, // Allow cookies/auth headers
     })
   );
-app.options("*", cors());
 
 connectDB();
 
