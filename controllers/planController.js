@@ -3,14 +3,15 @@ import expressAsyncHandler from "express-async-handler";
 
 const createPlan = expressAsyncHandler(async (req, res) => {
     try {
-        const {content, projectId} = req.body;
-        if(!content || !projectId){
-            return res.status(400).json({message: "Content and ProjectId is required"});
+        const {content, projectId, userId} = req.body;
+        if(!content || !projectId || !userId){
+            return res.status(400).json({message: "Content, userId and ProjectId is required"});
         }
 
         const plan = await Plan.create({
             content,
-            projectId
+            projectId,
+            userId
         });
 
         const newPlan = await plan.save();
@@ -22,7 +23,8 @@ const createPlan = expressAsyncHandler(async (req, res) => {
 
 const getAllPlans = expressAsyncHandler(async (req, res) => {
     try {
-        const plans = await Plan.find().populate('projectId', 'name emoji');
+        const userId = req.user._id;
+        const plans = await Plan.find({userId}).populate('projectId', 'name emoji');
         if(plans.length > 0){
             res.status(200).json(plans);
         }else{
@@ -37,15 +39,16 @@ const updatePlan = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id;
-        const {content} = req.body;
-        if (!id || !content || !projectId) {
-            return res.status(400).json({ message: "Id, Content and ProjectId is required" });
+        const {content, userId} = req.body;
+        if (!id || !content || !projectId || !userId) {
+            return res.status(400).json({ message: "Id, userId and Content and ProjectId is required" });
         }
 
         const updatedPlan = await Plan.findByIdAndUpdate(id, {
             $set: {
                 content,
-                projectId
+                projectId,
+                userId
             },
         },{ new: true, runValidators: true });
 

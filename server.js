@@ -3,14 +3,12 @@ import {configDotenv} from "dotenv";
 import cors from "cors";
 import todoRoutes from "./routes/todoRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
-import focusRoutes from "./routes/focusRoutes.js";
 import planRoutes from "./routes/planRoutes.js";
 import memoryRoutes from "./routes/memoryRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
-import learningRoutes from "./routes/learningRoutes.js";
-import gratitudeRoutes from "./routes/gratitudeRoutes.js";
 import philosophyRoutes from "./routes/philosophyRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import cookieParser from "cookie-parser";
 import { connectDB } from "./config/connectDB.js";
 
 configDotenv();
@@ -26,8 +24,10 @@ app.listen(port, () => {
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 app.use(cors({
     origin: [client],
+    credentials: true
 }));
 
 connectDB();
@@ -35,10 +35,7 @@ connectDB();
 app.use('/api/users', userRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/focus', focusRoutes);
 app.use('/api/memories', memoryRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/plans', planRoutes);
-app.use('/api/gratitudes', gratitudeRoutes);
-app.use('/api/learnings', learningRoutes);
 app.use('/api/philosophies', philosophyRoutes);

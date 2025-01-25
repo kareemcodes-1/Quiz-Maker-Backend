@@ -3,14 +3,15 @@ import expressAsyncHandler from "express-async-handler";
 
 const createProject = expressAsyncHandler(async (req, res) => {
     try {
-        const {name, emoji} = req.body;
-        if(!name || !emoji){
-            return res.status(400).json({message: "Name and emoji is required"});
+        const {name, emoji, userId} = req.body;
+        if(!name || !emoji || !userId){
+            return res.status(400).json({message: "Name, userId and emoji is required"});
         }
 
         const project = await Project.create({
             name,
-            emoji
+            emoji,
+            userId
         });
 
         const newProject = await project.save();
@@ -22,13 +23,16 @@ const createProject = expressAsyncHandler(async (req, res) => {
 
 const getAllProjects = expressAsyncHandler(async (req, res) => {
     try {
-        const projects = await Project.find();
+        const userId = req.user._id
+        const projects = await Project.find({userId});
+        console.log(projects);
         if(projects.length > 0){
             res.status(200).json(projects);
         }else{
             return res.status(400).json({message: "Projects are empty"}); 
         }
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Server Error"});
     }
 });

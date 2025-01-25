@@ -5,6 +5,11 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     emoji: {
         type: mongoose.Schema.Types.String,
         required: true

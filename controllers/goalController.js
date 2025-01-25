@@ -3,13 +3,14 @@ import expressAsyncHandler from "express-async-handler";
 
 const createGoal = expressAsyncHandler(async (req, res) => {
     try {
-        const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate, image} = req.body;
-        if(!name || !projectId || !time || !startDeadlineDate || !endDeadlineDate){
+        const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate, image, userId} = req.body;
+        if(!name || !projectId || !time || !startDeadlineDate || !endDeadlineDate || !userId){
             return res.status(400).json({message: "Name, ProjectId Time startDeadline and endDeadline is required"});
         }
 
         const goal = await Goal.create({
             name,
+            userId,
             projectId,
             time,
             image,
@@ -28,7 +29,8 @@ const createGoal = expressAsyncHandler(async (req, res) => {
 
 const getAllGoals = expressAsyncHandler(async (req, res) => {
     try {
-        const goals = await Goal.find().populate('projectId', 'name emoji');
+        const userId = req.user._id;
+        const goals = await Goal.find({userId}).populate('projectId', 'name emoji');
         if(goals.length > 0){
             res.status(200).json(goals);
         }else{
@@ -43,8 +45,8 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id
-        const {name, time, startDeadlineDate, endDeadlineDate, image} = req.body;
-        if (!id || !name || !projectId || !time || !startDeadlineDate  || !endDeadlineDate) {
+        const {name, time, startDeadlineDate, endDeadlineDate, image, userId} = req.body;
+        if (!id || !name || !projectId || !time || !startDeadlineDate  || !endDeadlineDate || !userId) {
             return res.status(400).json({ message: "Id, Name, ProjectId Time startDeadline and endDeadline is required" });
         }
 
@@ -52,6 +54,7 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
             $set: {
                 name,
                 projectId,
+                userId,
                 image,
                 time,
                 startDeadlineDate,
@@ -72,6 +75,7 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
 const deleteGoal = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
+        // const userId = req.user._id;
 
         if (!id) {
             return res.status(400).json({ message: "Id is required" });

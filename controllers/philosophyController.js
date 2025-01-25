@@ -3,13 +3,14 @@ import expressAsyncHandler from "express-async-handler";
 
 const createPhilosophy = expressAsyncHandler(async (req, res) => {
     try {
-        const {content} = req.body;
-        if(!content){
-            return res.status(400).json({message: "Content is required"});
+        const {content, userId} = req.body;
+        if(!content || !userId){
+            return res.status(400).json({message: "Content and UserId is required"});
         }
 
         const philosophy = await Philosophy.create({
             content,
+            userId
         });
 
         const newPhilosophy = await philosophy.save();
@@ -21,13 +22,15 @@ const createPhilosophy = expressAsyncHandler(async (req, res) => {
 
 const getAllPhilosophy = expressAsyncHandler(async (req, res) => {
     try {
-        const philosophies = await Philosophy.find();
+        const userId = req.user._id;
+        const philosophies = await Philosophy.find({userId});
         if(philosophies.length > 0){
             res.status(200).json(philosophies);
         }else{
             return res.status(400).json({message: "Philosophies are empty"}); 
         }
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: error.message});
     }
 });
@@ -35,14 +38,15 @@ const getAllPhilosophy = expressAsyncHandler(async (req, res) => {
 const updatePhilosophy = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
-        const {content} = req.body;
-        if (!id || !content) {
-            return res.status(400).json({ message: "Id and Content is required" });
+        const {content, userId} = req.body;
+        if (!id || !content || !userId) {
+            return res.status(400).json({ message: "Id, userId and Content is required" });
         }
 
         const updatedPhilosophy = await Philosophy.findByIdAndUpdate(id, {
             $set: {
                 content,
+                userId
             },
         },{ new: true, runValidators: true });
 

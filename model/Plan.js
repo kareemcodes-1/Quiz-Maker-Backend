@@ -7,6 +7,11 @@ const planSchema = new mongoose.Schema(
       ref: "Project",
       required: true,
     },
+    userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
     content: {
       type: mongoose.Schema.Types.String,
       required: true,

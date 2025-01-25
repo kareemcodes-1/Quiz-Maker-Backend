@@ -4,15 +4,16 @@ import expressAsyncHandler from "express-async-handler";
 const createTodo = expressAsyncHandler(async (req, res) => {
     try {
         const projectId = req.body.projectId._id;
-        const {name, date, time, completed} = req.body;
-        if(!name || !projectId || !date || !time){
-            return res.status(400).json({message: "Name, projectId, Time and Date is required"});
+        const {name, date, time, completed, userId} = req.body;
+        if(!name || !projectId || !date || !time || !userId){
+            return res.status(400).json({message: "Name, projectId, userId, Time and Date is required"});
         }
 
         const todo = await Todo.create({
             name,
             projectId,
             date, 
+            userId,
             time,
             completed
         })
@@ -28,7 +29,8 @@ const createTodo = expressAsyncHandler(async (req, res) => {
 
 const getAllTodos = expressAsyncHandler(async (req, res) => {
     try {
-        const todos = await Todo.find().populate('projectId', 'name emoji');
+        const userId = req.user._id;
+        const todos = await Todo.find({userId}).populate('projectId', 'name emoji');
         if(todos.length > 0){
             res.status(200).json(todos);
         }else{
@@ -42,17 +44,18 @@ const getAllTodos = expressAsyncHandler(async (req, res) => {
 const updateTodo = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
-        const {name, date, time} = req.body;
+        const {name, date, time, userId} = req.body;
         const projectId = req.body.projectId._id;
 
-        if (!id || !name || !projectId) {
-            return res.status(400).json({ message: "Id, Name, ProjectId, Date and Time is required" });
+        if (!id || !name || !projectId || !userId) {
+            return res.status(400).json({ message: "Id, Name, userId, ProjectId, Date and Time is required" });
         }
 
         const updatedTodo = await Todo.findByIdAndUpdate(id, {
             $set: {
                 name,
                 projectId,
+                userId,
                 time,
                 date
             },
