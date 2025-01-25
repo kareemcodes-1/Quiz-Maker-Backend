@@ -31,7 +31,7 @@ app.use(
       credentials: true, // Allow cookies/auth headers
     })
   );
-  app.options("*", cors());
+app.options("*", cors());
 
 connectDB();
 
