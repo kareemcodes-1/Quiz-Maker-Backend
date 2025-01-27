@@ -25,7 +25,6 @@ const getAllProjects = expressAsyncHandler(async (req, res) => {
     try {
         const userId = req.user._id
         const projects = await Project.find({userId});
-        console.log(projects);
         if(projects.length > 0){
             res.status(200).json(projects);
         }else{

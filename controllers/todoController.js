@@ -5,6 +5,7 @@ const createTodo = expressAsyncHandler(async (req, res) => {
     try {
         const projectId = req.body.projectId._id;
         const {name, date, time, completed, userId} = req.body;
+        console.log(userId);
         if(!name || !projectId || !date || !time || !userId){
             return res.status(400).json({message: "Name, projectId, userId, Time and Date is required"});
         }

@@ -50,7 +50,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 const loginUser = expressAsyncHandler(async (req, res) => {
     try {
     const {email, password} = req.body;
-    console.log(email, password);
 
     if(!email || !password){
         return res.status(400).json({message: "Email and Password are required"});
