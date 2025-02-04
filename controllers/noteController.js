@@ -1,41 +1,42 @@
-import { Plan } from "../model/Plan.js";
+import { Note } from "../model/Note.js";
 import expressAsyncHandler from "express-async-handler";
 
-const createPlan = expressAsyncHandler(async (req, res) => {
+const createNote = expressAsyncHandler(async (req, res) => {
     try {
         const {content, projectId, userId} = req.body;
         if(!content || !projectId || !userId){
             return res.status(400).json({message: "Content, userId and ProjectId is required"});
         }
 
-        const plan = await Plan.create({
+        const note = await Note.create({
             content,
             projectId,
             userId
         });
 
-        const newPlan = await plan.save();
-        res.status(201).json(newPlan);
+        const newNote = await note.save();
+        res.status(201).json(newNote);
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Server Error"});
     }
 });
 
-const getAllPlans = expressAsyncHandler(async (req, res) => {
+const getAllNotes = expressAsyncHandler(async (req, res) => {
     try {
         const userId = req.user._id;
-        const plans = await Plan.find({userId}).populate('projectId', 'name emoji');
-        if(plans.length > 0){
-            res.status(200).json(plans);
+        const notes = await Note.find({userId}).populate('projectId', 'name emoji');
+        if(notes.length > 0){
+            res.status(200).json(notes);
         }else{
-            return res.status(400).json({message: "Plans are empty"}); 
+            return res.status(400).json({message: "Notes are empty"}); 
         }
     } catch (error) {
         res.status(500).json({message: "Server Error"});
     }
 });
 
-const updatePlan = expressAsyncHandler(async (req, res) => {
+const updateNote = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
         const projectId = req.body.projectId._id;
@@ -44,7 +45,7 @@ const updatePlan = expressAsyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Id, userId and Content and ProjectId is required" });
         }
 
-        const updatedPlan = await Plan.findByIdAndUpdate(id, {
+        const updatedNote = await Note.findByIdAndUpdate(id, {
             $set: {
                 content,
                 projectId,
@@ -52,17 +53,17 @@ const updatePlan = expressAsyncHandler(async (req, res) => {
             },
         },{ new: true, runValidators: true });
 
-        if (!updatedPlan) {
-            return res.status(404).json({ message: "Plan not found" });
+        if (!updatedNote) {
+            return res.status(404).json({ message: "Note not found" });
         }
 
-        res.status(200).json(updatedPlan);
+        res.status(200).json(updatedNote);
     } catch (error) {
         res.status(500).json({message: "Server Error"});
     }
 });
 
-const deletePlan = expressAsyncHandler(async (req, res) => {
+const deleteNote = expressAsyncHandler(async (req, res) => {
     try {
         const {id} = req.params;
 
@@ -70,12 +71,12 @@ const deletePlan = expressAsyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Id is required" });
         }
 
-        const deletedPlan = await Plan.findByIdAndDelete(id);
+        const deletedNote = await Note.findByIdAndDelete(id);
 
-        res.status(200).json(deletedPlan);
+        res.status(200).json(deletedNote);
     } catch (error) {
         res.status(500).json({message: "Server Error"});
     }
 });
 
-export {createPlan, getAllPlans, updatePlan, deletePlan};
+export {createNote, getAllNotes, updateNote, deleteNote};

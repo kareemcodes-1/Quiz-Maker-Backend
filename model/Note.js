@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const planSchema = new mongoose.Schema(
+const noteSchema = new mongoose.Schema(
   {
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,4 +20,4 @@ const planSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Plan = new mongoose.model("Plan", planSchema);
+export const Note = new mongoose.model("Note", noteSchema);
