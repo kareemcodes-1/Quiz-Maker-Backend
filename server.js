@@ -9,6 +9,7 @@ import goalRoutes from "./routes/goalRoutes.js";
 import philosophyRoutes from "./routes/philosophyRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import flashCardRoutes from "./routes/flashCardRoutes.js";
+import topicRoutes from "./routes/topicRoutes.js";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/connectDB.js";
 
@@ -43,3 +44,4 @@ app.use('/api/goals', goalRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/philosophies', philosophyRoutes);
 app.use('/api/flashcards', flashCardRoutes);
+app.use('/api/topics', topicRoutes);

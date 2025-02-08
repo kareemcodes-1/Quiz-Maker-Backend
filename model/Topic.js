@@ -1,15 +1,10 @@
 import mongoose from "mongoose";
 
-const flashcardSchema = new mongoose.Schema(
+const topicSchema = new mongoose.Schema(
   {
-    // projectId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Project",
-    //   required: true,
-    // },
-    topicId: {
+    projectId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Topic",
+      ref: "Project",
       required: true,
     },
     userId: {
@@ -17,12 +12,12 @@ const flashcardSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
-    frontContent: {
+    name: {
       type: mongoose.Schema.Types.String,
       required: true,
     },
 
-    backContent: {
+    description: {
         type: mongoose.Schema.Types.String,
         required: true,
       },
@@ -30,4 +25,4 @@ const flashcardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const FlashCard = new mongoose.model("FlashCard", flashcardSchema);
+export const Topic = new mongoose.model("Topic", topicSchema);
