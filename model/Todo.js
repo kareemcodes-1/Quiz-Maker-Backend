@@ -14,6 +14,12 @@ const todoSchema = new mongoose.Schema({
         ref: 'Project',
         required: true
     },
+    priority: {
+        type: String,
+        enum: ['High', 'Medium', 'Low'],
+        default: 'Medium',
+        required: true,
+    },
     date: {
         type: mongoose.Schema.Types.Date,
         required: true,
