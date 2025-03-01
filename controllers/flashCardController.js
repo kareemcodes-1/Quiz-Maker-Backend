@@ -6,11 +6,6 @@ import {configDotenv} from "dotenv";
 configDotenv();
 
 
-const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com/v1',
-    apiKey: process.env.DEEPSEEK_API_KEY,
-});
-
 const createFlashCard = expressAsyncHandler(async (req, res) => {
     try {
         const {frontContent, backContent, userId, topicId} = req.body;
@@ -34,41 +29,7 @@ const createFlashCard = expressAsyncHandler(async (req, res) => {
 });
 
 const createFlashCardWithAI = expressAsyncHandler(async (req, res) => {
-    try {
-        const {message, userId, topicId} = req.body;
-        if(!message || !userId || !topicId){
-            return res.status(400).json({message: "Message, userId and topicId is required"});
-        }
-
-        
-        const prompt = `Generate a flashcard based on the following message: "${message}"`;
-
-        // Request to OpenAI to generate the flashcard content
-        const response = await openai.completions.create({
-            model: "deepseek-reasoner",
-            prompt: prompt,
-            max_tokens: 150,
-        });
-
-        const generatedFront = response.choices[0].text;
-        // const generatedBack = `Detailed explanation for: "${message}"`;
-
-        console.log(generatedFront);
-        console.log(generatedBack);
-
-        // const flashCard = await FlashCard.create({
-        //     frontContent,
-        //     backContent,
-        //     topicId,
-        //     userId
-        // });
-
-        // const newFlashCard = await flashCard.save();
-        // res.status(201).json(newFlashCard);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message: "Server Error"});
-    }
+ 
 });
 
 const getAllFlashCards = expressAsyncHandler(async (req, res) => {
