@@ -4,8 +4,8 @@ import expressAsyncHandler from "express-async-handler";
 const createGoal = expressAsyncHandler(async (req, res) => {
     try {
         const {name, projectId, time, completed, startDeadlineDate, endDeadlineDate, image, userId} = req.body;
-        if(!name || !projectId || !time || !startDeadlineDate || !endDeadlineDate || !userId){
-            return res.status(400).json({message: "Name, ProjectId Time startDeadline and endDeadline is required"});
+        if(!name || !projectId || !time  || !userId){
+            return res.status(400).json({message: "Name, ProjectId Time is required"});
         }
 
         const goal = await Goal.create({
@@ -23,6 +23,7 @@ const createGoal = expressAsyncHandler(async (req, res) => {
         await newGoal.populate('projectId', 'name emoji');
         res.status(201).json(newGoal);
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Server Error"});
     }
 });
@@ -46,8 +47,8 @@ const updateGoal = expressAsyncHandler(async (req, res) => {
         const {id} = req.params;
         const projectId = req.body.projectId._id
         const {name, time, startDeadlineDate, endDeadlineDate, image, userId} = req.body;
-        if (!id || !name || !projectId || !time || !startDeadlineDate  || !endDeadlineDate || !userId) {
-            return res.status(400).json({ message: "Id, Name, ProjectId Time startDeadline and endDeadline is required" });
+        if (!id || !name || !projectId || !time || !userId) {
+            return res.status(400).json({ message: "Id, Name, ProjectId Time is required" });
         }
 
         const updatedGoal = await Goal.findByIdAndUpdate(id, {

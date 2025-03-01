@@ -25,11 +25,11 @@ const goalSchema = new mongoose.Schema({
     },
     startDeadlineDate: {
         type: mongoose.Schema.Types.Date,
-        required: true
+        required: false
     },
     endDeadlineDate: {
         type: mongoose.Schema.Types.Date,
-        required: true
+        required: false
     },
     completed: {
         type: Boolean,
