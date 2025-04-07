@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route('/').get( getAllTopics).post( createTopic);
 router.route('/topic/:id').get(getTopic)
-router.put('/edit/:id', updateTopic);
-router.delete('/delete/:id', deleteTopic);
+router.put('/topic/edit/:id', updateTopic);
+router.delete('/topic/delete/:id', deleteTopic);
 
 export default router
